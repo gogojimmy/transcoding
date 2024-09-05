@@ -1,6 +1,5 @@
 FROM alpine:3.14
 
-# Install necessary dependencies (excluding ffmpeg)
 RUN apk add --no-cache \
     build-base \
     pcre-dev \
@@ -8,7 +7,8 @@ RUN apk add --no-cache \
     zlib-dev \
     linux-headers \
     wget \
-    git
+    git \
+    ffmpeg
 
 # Download and extract NGINX
 RUN wget http://nginx.org/download/nginx-1.21.6.tar.gz && \

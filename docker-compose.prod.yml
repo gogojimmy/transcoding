@@ -7,7 +7,6 @@ services:
     volumes:
       - ./nginx.conf:/usr/local/nginx/conf/nginx.conf
       - ./logs:/var/log/nginx
-      - /usr/local/bin/ffmpeg:/usr/local/bin/ffmpeg # Mount host's ffmpeg
     deploy:
       resources:
         reservations:
