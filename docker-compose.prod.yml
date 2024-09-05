@@ -8,11 +8,12 @@ services:
       - ./nginx.conf:/usr/local/nginx/conf/nginx.conf
       - ./logs:/var/log/nginx
       - /usr/local/bin/ffmpeg:/usr/local/bin/ffmpeg # Mount host's ffmpeg
-    devices:
-      - /dev/nvidia0:/dev/nvidia0
-      - /dev/nvidiactl:/dev/nvidiactl
-      - /dev/nvidia-uvm:/dev/nvidia-uvm
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu, utility, compute, video]
     environment:
       - NVIDIA_VISIBLE_DEVICES=all
-      - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
-    runtime: nvidia
