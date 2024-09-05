@@ -7,7 +7,7 @@ services:
     volumes:
       - ./nginx.conf:/usr/local/nginx/conf/nginx.conf
       - ./logs:/var/log/nginx
-      - /usr/bin/ffmpeg:/usr/bin/ffmpeg # Mount host's ffmpeg
+      - /usr/local/bin/ffmpeg:/usr/local/bin/ffmpeg # Mount host's ffmpeg
     devices:
       - /dev/nvidia0:/dev/nvidia0
       - /dev/nvidiactl:/dev/nvidiactl
