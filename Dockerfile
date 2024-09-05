@@ -1,5 +1,5 @@
 # 使用 nvidia/cuda 作為基礎映像
-FROM nvidia/cuda:12.2-runtime-ubuntu20.04
+FROM nvidia/cuda:12.6.0-runtime-ubuntu20.04
 
 # 安裝必要的工具和依賴項
 RUN apt-get update && apt-get install -y \
