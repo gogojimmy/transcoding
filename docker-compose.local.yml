@@ -1,0 +1,13 @@
+services:
+  nginx-rtmp:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    ports:
+      - "1935:1935"
+      - "8080:8080"
+    volumes:
+      - ./nginx-local.conf:/usr/local/nginx/conf/nginx.conf
+      - ./stat.xsl:/usr/local/nginx/html/stat.xsl
+      - ./logs:/var/log/nginx
+      - /usr/bin/ffmpeg:/usr/bin/ffmpeg # Mount host's ffmpeg

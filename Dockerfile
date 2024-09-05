@@ -1,29 +1,42 @@
-# Use the official NGINX image as the base image
-FROM nginx:latest
+FROM alpine:3.14
 
-# Install dependencies
-RUN apt-get update && \
-    apt-get install -y git build-essential libpcre3 libpcre3-dev libssl-dev zlib1g-dev ffmpeg
+# Install necessary dependencies (excluding ffmpeg)
+RUN apk add --no-cache \
+    build-base \
+    pcre-dev \
+    openssl-dev \
+    zlib-dev \
+    linux-headers \
+    wget \
+    git
+
+# Download and extract NGINX
+RUN wget http://nginx.org/download/nginx-1.21.6.tar.gz && \
+    tar -zxvf nginx-1.21.6.tar.gz && \
+    cd nginx-1.21.6
 
 # Clone nginx-rtmp-module
 RUN git clone https://github.com/arut/nginx-rtmp-module.git /tmp/nginx-rtmp-module
 
-# Download and extract NGINX source
-RUN wget http://nginx.org/download/nginx-1.21.6.tar.gz && \
-    tar -zxvf nginx-1.21.6.tar.gz && \
-    cd nginx-1.21.6 && \
-    ./configure --add-module=/tmp/nginx-rtmp-module --with-http_ssl_module && \
+# Compile NGINX with RTMP module
+RUN cd nginx-1.21.6 && \
+    ./configure \
+    --prefix=/usr/local/nginx \
+    --add-module=/tmp/nginx-rtmp-module \
+    --with-http_ssl_module \
+    --with-cc-opt="-Wimplicit-fallthrough=0" && \
     make && \
     make install
 
-# Copy the custom nginx configuration file
+# Copy the NGINX configuration file
 COPY nginx.conf /usr/local/nginx/conf/nginx.conf
 
 # Copy the RTMP stat stylesheet
 COPY stat.xsl /usr/local/nginx/html/stat.xsl
 
-# Expose ports
+# Create necessary directories
+RUN mkdir -p /tmp/hls
+
 EXPOSE 1935 8080
 
-# Start NGINX
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/usr/local/nginx/sbin/nginx", "-g", "daemon off;"]

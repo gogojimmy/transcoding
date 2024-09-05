@@ -1,5 +1,5 @@
 services:
-  nginx-rtmp-prod:
+  nginx-rtmp:
     build: .
     ports:
       - "1935:1935"
@@ -7,6 +7,7 @@ services:
     volumes:
       - ./nginx.conf:/usr/local/nginx/conf/nginx.conf
       - ./logs:/var/log/nginx
+      - /usr/bin/ffmpeg:/usr/bin/ffmpeg # Mount host's ffmpeg
     devices:
       - /dev/nvidia0:/dev/nvidia0
       - /dev/nvidiactl:/dev/nvidiactl
@@ -15,15 +16,3 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=compute,video,utility
     runtime: nvidia
-
-  nginx-rtmp-local:
-    build:
-      context: .
-      dockerfile: Dockerfile.local
-    ports:
-      - "1935:1935"
-      - "8080:8080"
-    volumes:
-      - ./nginx-local.conf:/usr/local/nginx/conf/nginx.conf
-      - ./stat.xsl:/usr/local/nginx/html/stat.xsl
-      - ./logs:/var/log/nginx
