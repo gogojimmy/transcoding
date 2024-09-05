@@ -1,6 +1,9 @@
 # 使用 nvidia/cuda 作為基礎映像
 FROM nvidia/cuda:12.6.0-runtime-ubuntu20.04
 
+# 設置 DEBIAN_FRONTEND 為 noninteractive 以避免交互式提示
+ENV DEBIAN_FRONTEND=noninteractive
+
 # 安裝必要的工具和依賴項
 RUN apt-get update && apt-get install -y \
     build-essential \
